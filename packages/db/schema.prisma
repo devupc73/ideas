@@ -1,0 +1,73 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  createdAt DateTime @default(now())
+
+  memberships GroupMember[]
+  participations Participation[]
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  members   GroupMember[]
+  matches   Match[]
+  wallet    WalletMovement[]
+}
+
+model GroupMember {
+  id      String @id @default(uuid())
+  groupId String
+  userId  String
+
+  group Group @relation(fields: [groupId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+}
+
+model Match {
+  id         String   @id @default(uuid())
+  groupId    String
+  date       DateTime
+  modality   String
+  cost       Float
+  capacity   Int
+  createdAt  DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id])
+  players Participation[]
+}
+
+model Participation {
+  id       String  @id @default(uuid())
+  matchId  String
+  userId   String
+  paid     Boolean @default(false)
+  team     String?
+
+  match Match @relation(fields: [matchId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+}
+
+model WalletMovement {
+  id        String   @id @default(uuid())
+  groupId   String
+  type      String
+  amount    Float
+  createdAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id])
+}
