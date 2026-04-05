@@ -1,0 +1,11 @@
+{
+  "name": "campo-libre-monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:api": "node packages/api/app.js"
+  }
+}
