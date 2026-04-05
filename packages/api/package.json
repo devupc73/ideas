@@ -1,0 +1,8 @@
+{
+  "name": "campo-libre-api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "fastify": "^4.0.0"
+  }
+}
