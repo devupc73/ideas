@@ -1,0 +1,36 @@
+model SportsComplex {
+  id        String   @id @default(uuid())
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+
+  amenities String[]
+
+  courts Court[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Court {
+  id             String   @id @default(uuid())
+  complexId      String
+  name           String
+  sportType      String
+  capacityPerSide Int
+  totalCapacity  Int
+  surfaceType    String?
+
+  complex SportsComplex @relation(fields: [complexId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ComplexAdmin {
+  id        String @id @default(uuid())
+  userId    String
+  complexId String
+  role      String
+}
