@@ -1,0 +1,61 @@
+model SportsComplex {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  address   String
+  latitude  Float
+  longitude Float
+
+  amenities String[]
+  isActive  Boolean @default(true)
+
+  courts Court[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Court {
+  id               String   @id @default(uuid())
+  complexId        String
+  code             String
+  name             String
+  sportType        String
+  capacityPerSide  Int
+  totalCapacity    Int
+  surfaceType      String?
+  isIndoor         Boolean  @default(false)
+  isActive         Boolean  @default(true)
+
+  complex SportsComplex @relation(fields: [complexId], references: [id])
+
+  schedules CourtSchedule[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CourtSchedule {
+  id                  String   @id @default(uuid())
+  courtId             String
+  dayOfWeek           Int
+  startTime           String
+  endTime             String
+  slotDurationMinutes Int
+  isActive            Boolean  @default(true)
+
+  court Court @relation(fields: [courtId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ComplexAdmin {
+  id        String @id @default(uuid())
+  complexId String
+  userId    String
+  role      String
+  isActive  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+}
